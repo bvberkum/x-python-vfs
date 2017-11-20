@@ -39,4 +39,37 @@ Issues
     mount: exec /Library/Filesystems/9p.fs/Contents/Resources/mount_9p for
     /mnt/py9p-test: No such file or directory
 
+
+- `gdrivefs` must be compiled, which it doesn't manage on my OSX/Darwin.
+
+ToDo
+------
+- `fusecry` seems to install cleanly, play with that a bit.
+- Split up code from x-fuse.py in some sensible manner.
+
+Further reading
+---------------
+Some other things to look at. [#]_ [#]_
+
+- `gdrivefs 0.14.8`__ access Google drive
+- `mockfs 1.0.2`__
+- `SVFS 2.0.0`__ - Multi-purpose virtual file system inside single file
+- `fusecry 0.11.2`__ - Encrypted filesystem and encryption tool based on FUSE
+  and AES.
+- `CouchDB-FUSE 0.2dev`__ mount and edit CouchDB attachments
+
+.. __: https://pypi.python.org/pypi/gdrivefs
+.. __: https://pypi.python.org/pypi/mockfs/1.0.2
+.. __: https://pypi.python.org/pypi/SVFS/2.0.0
+.. __: https://pypi.python.org/pypi/fusecry/0.11.2
+.. __: https://pypi.python.org/pypi/CouchDB-FUSE/0.2dev
+
+On a sidenode, PyFilesystem is a suite aiming to bring a universal file-like
+interface regardless of the reality. [#]_ Very neat, does it mount too?
+
+
+.. [#] <https://pypi.python.org/pypi?%3Aaction=search&term=vfs&submit=search>
+.. [#] <https://pypi.python.org/pypi?%3Aaction=search&term=filesystem&submit=search>
+.. [#] <https://www.pyfilesystem.org/>
+
 ..

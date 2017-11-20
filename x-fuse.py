@@ -55,8 +55,7 @@ class Passthrough(Operations):
 
     def listxattr(self, path): pass
     def getxattr(self, path, name, value):
-        #print('getxattr', path, name, value)
-        return name
+        raise FuseOSError(errno.ENOSYS)
 
     def readdir(self, path, fh):
         real_path = self._real_path(path)
@@ -334,17 +333,78 @@ class HideBrokenSymlinks(Passthrough):
         return dirents
 
 
-class HideEmptyFolder(Passthrough): pass
+class ResolveSymlinks(HideBrokenSymlinks):
+
+    """
+    TODO: In addition to HideBrokenSymlinks, hide all symlinks by resolve to
+    real path. Read-only; should no try to update target descriptor.
+    """
+
+#    def _real_path(self, partial):
+#        if partial.startswith("/"):
+#            partial = partial[1:]
+#        newp = os.path.realpath(os.path.abspath(os.path.join(self.root, partial)))
+#        return newp
+
+
+class HideSymlinksAndEmptyFolders(Passthrough):
+
+    def scan_empty(self, real_path, entries=None):
+        entries = os.listdir(real_path)
+        for e in entries:
+            print('scan_empty', real_path, e)
+            p = os.path.join(real_path, e)
+            if os.path.isdir(p):
+                if self.scan_empty(p):
+                    continue
+                return False
+            #if hide-broken-symlinks
+            if os.path.islink(p) and not os.path.exists(p):
+                continue
+            return False
+        print('empty', real_path)
+        return True
+
+    def get_dirents(self, real_path):
+
+        """
+        Hide directory entries with nothing but directories beneath.
+        """
+
+        dirents = []
+        if os.path.isdir(real_path):
+            entries = os.listdir(real_path)
+            print(1)
+            if self.scan_empty(real_path, entries):
+                print(2)
+                print('scan_empty', real_path)
+                return ['.', '..']
+            print(3)
+            r = []
+            for e in entries:
+                p = os.path.join(real_path, e)
+                if os.path.islink(p) and not os.path.exists(p):
+                    continue
+                r.append(e)
+            dirents.extend( r )
+        return ['.', '..'] + dirents
+
 
 class HidePattern(Passthrough): pass
 
-class Hide(HideBrokenSymlinks): pass
+class Hide(HideSymlinksAndEmptyFolders): pass
 
 
+def parse_bool(bstr):
+    return bstr.lower() == 'true'
 
 def main(mountpoint, spec):
+    fuse_kwds = dict(
+            nothreads=not parse_bool(os.getenv('X_FUSE_THREADS', 'false')),
+            foreground=not parse_bool(os.getenv('X_FUSE_BACKGROUND', 'true'))
+        )
     fs = eval(spec)
-    FUSE(fs, mountpoint, nothreads=True, foreground=True)
+    FUSE(fs, mountpoint, **fuse_kwds)
 
 
 if __name__ == '__main__':
