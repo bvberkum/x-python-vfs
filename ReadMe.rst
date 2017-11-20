@@ -1,7 +1,7 @@
 Python VFS (Virtual Filesystem)
 ================================
 :created: 2017-05-25
-:updated: 2017-05-25
+:updated: 2017-11-20
 :license: Simplified BSD
 :status: experimental
 
@@ -49,7 +49,7 @@ ToDo
 
 Further reading
 ---------------
-Some other things to look at. [#]_ [#]_
+Some other things to look at. At PyPi [#]_ [#]_, at GitHub [#]_.
 
 - `gdrivefs 0.14.8`__ access Google drive
 - `mockfs 1.0.2`__
@@ -68,8 +68,10 @@ On a sidenode, PyFilesystem is a suite aiming to bring a universal file-like
 interface regardless of the reality. [#]_ Very neat, does it mount too?
 
 
+
 .. [#] <https://pypi.python.org/pypi?%3Aaction=search&term=vfs&submit=search>
 .. [#] <https://pypi.python.org/pypi?%3Aaction=search&term=filesystem&submit=search>
+.. [#] <https://github.com/topics/filesystem>
 .. [#] <https://www.pyfilesystem.org/>
 
 ..
