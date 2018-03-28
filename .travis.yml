@@ -3,7 +3,6 @@ language: python
 python:
   - "2.7"
 
-
 addons:
   apt:
     packages:
@@ -11,6 +10,16 @@ addons:
       - realpath
       - uuid-runtime
       - moreutils
+      - fuse
+
+before_script:
+- sudo touch /etc/fuse.conf
+- sudo chown $USER /etc/fuse.conf
+- sudo modprobe fuse
 
 script:
 - make test
+
+env:
+  global:
+    - pref="sudo "
