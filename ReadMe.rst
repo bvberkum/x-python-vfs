@@ -1,7 +1,7 @@
 Python VFS (Virtual Filesystem)
 ================================
 :created: 2017-05-25
-:updated: 2017-11-20
+:updated: 2018-03-28
 :license: Simplified BSD
 :status: experimental
 
@@ -9,12 +9,12 @@ Found little to no practical implementations, while there ought to be many.
 
 Guess most software has little patience for those legacy non-HTTP bags of
 bytes on your local harddrive. Security, performance, reliability may all
-contribute to wanting to avoid python based file system?
+contribute to wanting to avoid custom/python based file system?
 
 After some examples for python-fuse these where fairly simple:
 
-- `OSPassthrough`, a mirror vfs of another local dir.
-- `OSStack`, a mirror of several local dirs into one.
+- `OSPassthrough`_, a mirror vfs of another local dir.
+- `OSStack`_, a mirror of several local dirs into one.
 
 Wanted
 
@@ -30,6 +30,27 @@ Ideas
 
   - would need an outline schema
   - may like to include other vfs types, ie. make a JSONComposite
+
+
+.. _OSPassthrough: x-fuse.py
+.. _OSStack: x-fuse.py
+
+Getting Started
+---------------
+Examples::
+
+  python x-fuse.py /tmp/x-fuse/ "OSPassthrough('$PWD')"
+  python x-fuse.py /tmp/x-fuse "OSStack('$PATH')"
+
+Generic invocation takes a python expression to initialize filesystem::
+
+  python x-fuse.py ./my/path/to/mount/ "<FSType>(<FSArgs>)" [ FSName [ PIDFile ]]
+
+These environment variables are picked up to customize FUSE behaviour; defaults::
+
+  X_FUSE_THREADS=false
+  X_FUSE_BACKGROUND=true
+
 
 Issues
 ------
