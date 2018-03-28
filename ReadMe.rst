@@ -3,7 +3,28 @@ Python VFS (Virtual Filesystem)
 :created: 2017-05-25
 :updated: 2018-03-28
 :license: Simplified BSD
-:status: experimental
+:status:
+  .. image:: http://img.shields.io/travis/bvberkum/x-python-vfs.svg
+     :target: https://travis-ci.org/bvberkum/x-python-vfs
+  .. image:: https://img.shields.io/github/license/bvberkum/x-python-vfs.svg
+     :alt: repo license
+  .. image:: https://img.shields.io/github/commit-activity/y/bvberkum/x-python-vfs.svg
+     :alt: commits per year
+  .. image:: https://img.shields.io/github/languages/code-size/bvberkum/x-python-vfs.svg
+  .. image:: https://img.shields.io/github/repo-size/bvberkum/x-python-vfs.svg
+
+  master:
+    .. image:: https://img.shields.io/github/last-commit/bvberkum/x-python-vfs/master.svg
+      :alt: last-commit on master
+
+  dev:
+    .. image:: https://img.shields.io/github/last-commit/bvberkum/x-python-vfs/dev.svg
+      :alt: last-commit on dev
+
+  test:
+    .. image:: https://img.shields.io/github/last-commit/bvberkum/x-python-vfs/test.svg
+      :alt: last-commit on test
+
 
 This document is on the current implementation, see also intro__.
 
