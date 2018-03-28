@@ -13,6 +13,8 @@ addons:
       - fuse
 
 before_script:
+- sudo touch /etc/fuse.conf
+- sudo chown $USER /etc/fuse.conf
 - sudo modprobe fuse
 
 script:
