@@ -2,8 +2,8 @@
 set -e
 
 export _MP=/tmp/x-fuse
-
 mkdir -vp $_MP
+test -n "$sudo" || pref="sudo "
 
 
 bats test/_not_mounted.bats
@@ -18,7 +18,7 @@ bats test/_mounted.bats
 bats test/os-passthrough-fs.bats
 bats test/os-common.bats
 
-umount $_MP
+${pref}umount $_MP
 
 
 X_FUSE_BACKGROUND=false \
@@ -29,7 +29,7 @@ sleep 1
 bats test/os-stack-fs.bats
 bats test/os-common.bats
 
-umount $_MP
+${pref}umount $_MP
 
 
 X_FUSE_BACKGROUND=false \
@@ -40,4 +40,4 @@ sleep 1
 bats test/os-hide-brokensymlinks-fs.bats
 bats test/os-common.bats
 
-umount $_MP
+${pref}umount $_MP
