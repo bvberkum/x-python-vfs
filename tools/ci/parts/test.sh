@@ -3,6 +3,8 @@ set -e
 
 export _MP=/tmp/x-fuse
 
+mkdir -vp $_MP
+
 
 bats test/_not_mounted.bats
 
