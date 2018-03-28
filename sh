@@ -1,11 +1,13 @@
 #!/bin/sh
 set -xe
 
-_MP=/tmp/x-fuse
+export PYTHONPATH=src:$$PYTHONPATH
 
+_MP=/tmp/x-fuse
 mkdir -vp $_MP
 X_FUSE_BACKGROUND=false \
-python x-fuse.py $_MP "Composite({'bin':OSStack('/usr/local/bin:$PWD/')})" &
+python x-fuse.py $_MP/ "OSPassthrough('$PWD')" &
+#python x-fuse.py $_MP "Composite({'bin':OSStack('/usr/local/bin:$PWD/')})" &
 sleep 1
 mount | grep x-fuse
 {
