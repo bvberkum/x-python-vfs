@@ -19,3 +19,7 @@ before_script:
 
 script:
 - make test
+
+env:
+  global:
+    - pref="sudo "
