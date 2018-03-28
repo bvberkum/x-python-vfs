@@ -12,5 +12,8 @@ addons:
       - moreutils
       - fuse
 
+before_script:
+- sudo modprobe fuse
+
 script:
 - make test
