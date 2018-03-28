@@ -21,26 +21,27 @@ bats test/os-common.bats
 
 ${pref}umount $_MP
 
-#echo '------------------------------------------------ OSStack'
-#
-#X_FUSE_BACKGROUND=false \
-#python x-fuse.py $_MP/ "OSStack('/usr/local/bin:$PWD/')" &
-#
-#sleep 1
-#
-#bats test/os-stack-fs.bats
-#bats test/os-common.bats
-#
-#${pref}umount $_MP
-#
-#echo '------------------------------------------------ HideBrokenSymlinks'
-#
-#X_FUSE_BACKGROUND=false \
-#python x-fuse.py $_MP/ "HideBrokenSymlinks('$PWD')" &
-#
-#sleep 1
-#
-#bats test/os-hide-brokensymlinks-fs.bats
-#bats test/os-common.bats
-#
-#${pref}umount $_MP
+echo '------------------------------------------------ OSStack'
+
+X_FUSE_BACKGROUND=false \
+python x-fuse.py $_MP/ "OSStack('$PWD/:/usr/local/bin')" &
+
+sleep 1
+
+bats test/os-stack-fs.bats
+skip="mkdir cp scp rsync" \
+bats test/os-common.bats
+
+${pref}umount $_MP
+
+echo '------------------------------------------------ HideBrokenSymlinks'
+
+X_FUSE_BACKGROUND=false \
+python x-fuse.py $_MP/ "HideBrokenSymlinks('$PWD')" &
+
+sleep 1
+
+bats test/os-hide-brokensymlinks-fs.bats
+bats test/os-common.bats
+
+${pref}umount $_MP

@@ -23,11 +23,43 @@ load  helper
   run mkdir $_MP/newDir
   test_ok_empty || stdfail mkdir
 
+  fnmatch "* mkdir *" " $skip " && {
+    rm -rf $_MP/newDir
+    TODO "mkdir, rsync etc. are not properly working yet"
+  }
+
   run touch $_MP/newDir/New.txt
   test_ok_empty || stdfail touch
 
   run rm -rf $_MP/newDir
   test_ok_empty || stdfail rm-rf
+}
+
+@test "filesystem handles mv" {
+
+  touch foo.bar
+  run mv $_MP/foo.bar $_MP/bar.foo
+  test_ok_empty || stdfail mv
+  test -e bar.foo
+  rm bar.foo
+}
+
+@test "filesystem handles cp" {
+
+  fnmatch "* cp *" " $skip " &&
+    TODO "copy doesn't work"
+  run cp $_MP/test/helper.bash $_MP/
+  test_ok_empty || stdfail cp
+  rm helper.bash
+}
+
+@test "filesystem handles scp" {
+
+  fnmatch "* scp *" " $skip " &&
+    TODO "secure copy doesn't work"
+  run scp $_MP/test/helper.bash $_MP/
+  test_ok_empty || stdfail scp
+  rm helper.bash
 }
 
 @test "filesystem handles 100M file" {
@@ -43,8 +75,13 @@ load  helper
 
 @test "filesystem handles rsync" {
 
+  fnmatch "* rsync *" " $skip " &&
+    TODO "rsync doesn't work"
+
   mkdir -vp src2
   rsync -avzui src/ $_MP/src2
   diff -bqr src $_MP/src2
   rm -rf src2
-}
+} 
+
+# TODO: more mode/attr tests

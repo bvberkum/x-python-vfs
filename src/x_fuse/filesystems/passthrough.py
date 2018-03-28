@@ -1,6 +1,12 @@
+"""Passthrough filesystem
+
+aka loopback, see also fusepy/examples/loopback.py
+
+"""
 from __future__ import with_statement, print_function
 import os
 import errno
+from threading import Lock
 
 from fuse import FuseOSError
 
@@ -21,6 +27,7 @@ class OSPassthrough(MyAbstractOperations):
     def __init__(self, root):
         self.root = root
         self.pidfile = None
+        self.rwlock = Lock()
 
     @property
     def args(self):
@@ -60,7 +67,8 @@ class OSPassthrough(MyAbstractOperations):
         return dict((key, getattr(st, key)) for key in ('st_atime', 'st_ctime',
                      'st_gid', 'st_mode', 'st_mtime', 'st_nlink', 'st_size', 'st_uid'))
 
-    def listxattr(self, path): pass
+    listxattr = None # (self, path):
+
     def getxattr(self, path, name, value):
         raise FuseOSError(errno.ENOSYS)
 
@@ -85,14 +93,15 @@ class OSPassthrough(MyAbstractOperations):
             return pathname
 
     def mknod(self, path, mode, dev):
-        return os.mknod(self._real_path(path, True), mode, dev)
+        real_path = self._real_path(path, True)
+        return os.mknod(real_path, mode, dev)
 
     def rmdir(self, path):
         real_path = self._real_path(path)
         return os.rmdir(real_path)
 
     def mkdir(self, path, mode):
-        real_path = self._real_path(path, False)
+        real_path = self._real_path(path, True)
         return os.mkdir(real_path, mode)
 
     def statfs(self, path):
@@ -134,15 +143,17 @@ class OSPassthrough(MyAbstractOperations):
 
     def create(self, path, mode, fi=None):
         real_path = self._real_path(path, False)
-        return os.open(real_path, os.O_WRONLY | os.O_CREAT, mode)
+        #return os.open(real_path, os.O_CREAT | os.O_WRONLY, mode)
+        return os.open(real_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, mode)
 
     def read(self, path, length, offset, fh):
         os.lseek(fh, offset, os.SEEK_SET)
         return os.read(fh, length)
 
     def write(self, path, buf, offset, fh):
-        os.lseek(fh, offset, os.SEEK_SET)
-        return os.write(fh, buf)
+        with self.rwlock:
+            os.lseek(fh, offset, os.SEEK_SET)
+            return os.write(fh, buf)
 
     def truncate(self, path, length, fh=None):
         real_path = self._real_path(path)
@@ -156,5 +167,9 @@ class OSPassthrough(MyAbstractOperations):
         return os.close(fh)
 
     def fsync(self, path, fdatasync, fh):
-        real_path = self._real_path(path)
-        return self.flush(real_path, fh)
+        if fdatasync != 0:
+            return os.fdatasync(fh)
+        else:
+            return os.fsync(fh)
+            #real_path = self._real_path(path)
+            #return self.flush(real_path, fh)

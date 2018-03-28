@@ -1,5 +1,7 @@
+from __future__ import with_statement, print_function
 import os
 import errno
+from threading import Lock
 
 from fuse import FuseOSError
 
@@ -21,6 +23,8 @@ class OSStack(OSPassthrough):
 
     def __init__(self, paths):
         self.paths = paths.split(':')
+        self.pidfile = None
+        self.rwlock = Lock()
 
     @property
     def args(self):
@@ -34,19 +38,24 @@ class OSStack(OSPassthrough):
         """
         Return base
         """
+        if partial.startswith("/"):
+            partial = partial[1:]
         if partial in ('', '/'): # Pick first dir
             path = p = self.paths[0]
         else:
-            if partial.startswith("/"):
-                partial = partial[1:]
             for p in self.paths:
                 path = os.path.join(p, partial)
-                if new:
-                    break
                 if os.path.exists(path) or os.path.islink(path):
                     break
-        if not new and not os.path.exists(path) and not os.path.islink(path):
-            raise FuseOSError(errno.EBADF)
+
+        if new and not os.path.exists(path):
+            # XXX: Stack create node: maybe look for deepest existing path?
+            p = self.paths[0]
+            path = os.path.join(p, partial)
+
+        # FIXME
+        #if not new and not os.path.exists(path) and not os.path.islink(path):
+        #    raise FuseOSError(errno.EBADF)
         if join:
             return p
         else:
