@@ -5,35 +5,9 @@ Python VFS (Virtual Filesystem)
 :license: Simplified BSD
 :status: experimental
 
-Found little to no practical implementations, while there ought to be many.
+This document is on the current implementation, see also intro__.
 
-Guess most software has little patience for those legacy non-HTTP bags of
-bytes on your local harddrive. Security, performance, reliability may all
-contribute to wanting to avoid custom/python based file system?
-
-After some examples for python-fuse these where fairly simple:
-
-- `OSPassthrough`_, a mirror vfs of another local dir.
-- `OSStack`_, a mirror of several local dirs into one.
-
-Wanted
-
-- `Transpose`, transform/add/remove prefixes
-- `Composite`, build a tree of other vfs, map prefixes
-
-Ideas
-
-- `Hide`, hide broken symlinks, empty dirs, files or on other attributes
-- `SQL/View`, format/update a record
-- `JSONAsis`, read attrs from a JSONfile, like CouchDB forges JSON from files
-- `JSONTree`, persist filesystem in a JSON
-
-  - would need an outline schema
-  - may like to include other vfs types, ie. make a JSONComposite
-
-
-.. _OSPassthrough: x-fuse.py
-.. _OSStack: x-fuse.py
+.. __: doc/main.rst
 
 Getting Started
 ---------------
@@ -41,6 +15,7 @@ Examples::
 
   python x-fuse.py /tmp/x-fuse/ "OSPassthrough('$PWD')"
   python x-fuse.py /tmp/x-fuse "OSStack('$PATH')"
+  python x-fuse.py /tmp/x-fuse "HideBrokenSymlinks('$PWD')"
 
 Generic invocation takes a python expression to initialize filesystem::
 
@@ -51,6 +26,11 @@ These environment variables are picked up to customize FUSE behaviour; defaults:
   X_FUSE_THREADS=false
   X_FUSE_BACKGROUND=true
 
+Testing
+-------
+::
+
+  make test
 
 Issues
 ------
@@ -65,8 +45,12 @@ Issues
 
 ToDo
 ------
-- `fusecry` seems to install cleanly, play with that a bit.
-- Split up code from x-fuse.py in some sensible manner.
+- Build a slightly more complex OSPassthrough with path renames/filtering.
+  Besides names also may want to map or filter on type (file/dir/special),
+  size, access mode.
+
+- May want to have a go with other libs: (py)vfs/objfs, py9p.
+  `fusecry` seems to install cleanly also.
 
 Further reading
 ---------------

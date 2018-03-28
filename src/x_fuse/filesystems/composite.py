@@ -114,6 +114,3 @@ class Composite(AbstractProxy):
 
     def readlink(self, path): pass
     def statfs(self, path): pass
-
-
-

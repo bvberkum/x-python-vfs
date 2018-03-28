@@ -24,4 +24,12 @@ bats test/os-stack-fs.bats
 
 umount /tmp/x-fuse
 
-bats test/_not_mounted.bats
+
+X_FUSE_BACKGROUND=false \
+python x-fuse.py /tmp/x-fuse/ "HideBrokenSymlinks('$PWD')" &
+
+sleep 1
+
+bats test/os-hide-brokensymlinks-fs.bats
+
+umount /tmp/x-fuse
