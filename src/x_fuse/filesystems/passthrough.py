@@ -29,10 +29,13 @@ class OSPassthrough(MyAbstractOperations):
     # Helpers
     # =======
 
-    def _real_path(self, partial):
+    def _real_path(self, partial, new=False):
         if partial.startswith("/"):
             partial = partial[1:]
         path = os.path.join(self.root, partial)
+        # FIXME
+        #if not new and not os.path.exists(path):
+        #    raise FuseOSError(errno.EBADF)
         return path
 
     # Filesystem methods
@@ -89,7 +92,8 @@ class OSPassthrough(MyAbstractOperations):
         return os.rmdir(real_path)
 
     def mkdir(self, path, mode):
-        return os.mkdir(self._real_path(path, True), mode)
+        real_path = self._real_path(path, False)
+        return os.mkdir(real_path, mode)
 
     def statfs(self, path):
         real_path = self._real_path(path)
@@ -106,7 +110,8 @@ class OSPassthrough(MyAbstractOperations):
         return d
 
     def unlink(self, path):
-        return os.unlink(self._real_path(path))
+        p = self._real_path(path)
+        return os.unlink(p)
 
     def symlink(self, name, target):
         return os.symlink(name, self._real_path(target))
@@ -128,7 +133,7 @@ class OSPassthrough(MyAbstractOperations):
         return os.open(real_path, flags)
 
     def create(self, path, mode, fi=None):
-        real_path = self._real_path(path)
+        real_path = self._real_path(path, False)
         return os.open(real_path, os.O_WRONLY | os.O_CREAT, mode)
 
     def read(self, path, length, offset, fh):
@@ -153,4 +158,3 @@ class OSPassthrough(MyAbstractOperations):
     def fsync(self, path, fdatasync, fh):
         real_path = self._real_path(path)
         return self.flush(real_path, fh)
-
