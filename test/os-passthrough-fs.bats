@@ -4,6 +4,6 @@
 
 @test "local dir/file are same as OSPassthrough" {
 
-  diff -bqr /tmp/x-fuse/ReadMe.rst ReadMe.rst
-  diff -bqr /tmp/x-fuse/.git .git
+  diff -bqr $_MP/ReadMe.rst ReadMe.rst
+  diff -bqr $_MP/.git .git
 }

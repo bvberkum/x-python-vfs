@@ -8,18 +8,18 @@
   for bin in tree curl vim wget lynx
   do
     test -e /usr/local/bin/$bin || continue
-    diff -bqr /tmp/x-fuse/$bin /usr/local/bin/$bin || {
+    diff -bqr $_MP/$bin /usr/local/bin/$bin || {
       echo "Failed at $bin"
     }
   done
 
   # File and dir look the same (to diff)
-  diff -bqr /tmp/x-fuse/ReadMe.rst ReadMe.rst
-  diff -bqr /tmp/x-fuse/.git .git
+  diff -bqr $_MP/ReadMe.rst ReadMe.rst
+  diff -bqr $_MP/.git .git
 
   # Symlink exists
-  test -e /tmp/x-fuse/test/var/symlinks/foo
+  test -e $_MP/test/var/symlinks/foo
 
   # Broken symlink exists
-  test -h /tmp/x-fuse/test/var/broken-symlinks/bar
+  test -h $_MP/test/var/broken-symlinks/bar
 }
