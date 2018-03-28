@@ -3,7 +3,6 @@ language: python
 python:
   - "2.7"
 
-
 addons:
   apt:
     packages:
@@ -11,6 +10,7 @@ addons:
       - realpath
       - uuid-runtime
       - moreutils
+      - fuse
 
 script:
 - make test
