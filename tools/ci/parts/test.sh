@@ -13,6 +13,7 @@ X_FUSE_BACKGROUND=false \
 python x-fuse.py $_MP/ "OSPassthrough('$PWD')" &
 
 sleep 1
+stat $_MP/ReadMe.rst
 
 bats test/_mounted.bats
 

@@ -9,7 +9,6 @@ load  helper
 @test "filesystem handles touch existing/new/remove" {
 
   test "$(whoami)" = "travis" && {
-    stat $_MP/ReadMe.rst
     TODO "scp somehow permission denied on Travis"
   }
 
