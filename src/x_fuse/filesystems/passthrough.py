@@ -68,9 +68,9 @@ class OSPassthrough(MyAbstractOperations):
                      'st_gid', 'st_mode', 'st_mtime', 'st_nlink', 'st_size', 'st_uid'))
 
     listxattr = None # (self, path):
-
-    def getxattr(self, path, name, value):
-        raise FuseOSError(errno.ENOSYS)
+    getxattr = None
+    #def getxattr(self, path, name, value):
+    #    raise FuseOSError(errno.ENOSYS)
 
     def readdir(self, path, fh):
         real_path = self._real_path(path)
