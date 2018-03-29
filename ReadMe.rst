@@ -66,6 +66,8 @@ Issues
 
 ToDo
 ------
+- Add-in LoggingMixIn, see fusepy/examples.
+
 - Build a slightly more complex OSPassthrough with path renames/filtering.
   Besides names also may want to map or filter on type (file/dir/special),
   size, access mode.
