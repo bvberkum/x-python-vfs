@@ -10,13 +10,19 @@ After some examples for python-fuse these where fairly simple to write:
 - `OSStack`, a mirror of several local dirs into one.
 - `HideBrokenSymlinks`, like it says.
 
-These seem to work OK, but no write test of any sort is done yet. Also while
-various service-based virtual filesystems can be thought of, my initial use
-cases revolve around creating composite, mirrored file trees. Read-only.
+These seem to work OK. But more thorough testing, esp. wrt to writing is needed.
+Testing with standard shell commands (touch,rm,mkdir,mv,cp,scp,dd,rsync),
+OSPassthrough is the only one passing all tests currently.
 
-This creates a challenge to implement this in code, rather than stack an
-endless mounts. If possible and ultimately desired, should want to try
-to implement various composite types.
+Also while various service-based virtual filesystems can be thought of, my
+initial use cases revolve around creating composite, mirrored file trees.
+So read-only. But even in that case the failure mode needs to be verified,
+ie. we want to assure good code coverage and test for expected failures.
+
+Composite file trees are another challenge, rather than stack on endless mounts
+of various VFS' instead offer a way to configure one VFS to do the same.
+If possible and ultimately desired, should want to try to implement various
+composite types.
 
 But first need to implement a transposing paths filesystem, test that.
 Then continue to types that accept instances, as well as paths.
