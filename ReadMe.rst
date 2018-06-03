@@ -75,6 +75,8 @@ ToDo
 - May want to have a go with other libs: (py)vfs/objfs, py9p.
   `fusecry` seems to install cleanly also.
 
+.. See also vftree.py in matador, sensor values VFS
+
 Further reading
 ---------------
 Some other things to look at. At PyPi [#]_ [#]_, at GitHub [#]_.
